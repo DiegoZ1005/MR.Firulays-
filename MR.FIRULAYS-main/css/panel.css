@@ -1,0 +1,345 @@
+/* RESET GENERAL */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.panel-body {
+    background-color: #f4f7fc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER Y NAVEGACIÓN */
+.panel-header {
+    background-color: #ffffff;
+    border-bottom: 2px solid #eef2f5;
+    width: 100%;
+}
+
+.navbar-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 4%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-text span {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    color: #003366;
+    line-height: 1;
+}
+
+.sub-logo {
+    font-size: 13px;
+    color: #0057C2;
+    font-weight: 600;
+    display: block;
+}
+
+/* TABS DEL MENÚ */
+.panel-tabs {
+    display: flex;
+    list-style: none;
+    gap: 35px;
+}
+
+.tab-item a {
+    text-decoration: none;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s;
+}
+
+.tab-item.active a {
+    color: #0057C2;
+    border-bottom: 3px solid #0057C2;
+    padding-bottom: 5px;
+}
+
+/* ÁREA DE PERFIL */
+.user-profile-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+    overflow: hidden;
+    border: 1px solid #cbd5e1;
+}
+
+.avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* CONTENIDO PRINCIPAL */
+.panel-content-wrapper {
+    flex: 1;
+    padding: 40px 4%;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.welcome-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    margin-bottom: 35px;
+}
+
+.welcome-banner {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-add-appointment {
+    background-color: #0057C2;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* GRID DE CITAS */
+.appointments-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.appointment-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card-top-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0057C2;
+    border-bottom: 1px dashed #e2e8f0;
+    padding-bottom: 10px;
+}
+
+.card-main-content {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.pet-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.pet-details h4 {
+    font-size: 16px;
+    color: #003366;
+    margin-bottom: 2px;
+}
+
+.status-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: #27ae60;
+    margin-top: 4px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-view-details, .btn-reprogram {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #e2e8f0;
+}
+
+/* FOOTER */
+.panel-footer {
+    background-color: #001A33;
+    color: #ffffff;
+    padding: 20px 4%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .appointments-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    .appointments-grid { grid-template-columns: 1fr; }
+    .navbar-panel { flex-direction: column; gap: 15px; }
+}
+
+/* =========================================
+   SECCIÓN DE PAGOS Y TABLA
+   ========================================= */
+.pagos-section {
+    margin-top: 30px;
+    padding: 0 20px;
+}
+
+.pagos-section .section-title {
+    color: #003366;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04); /* Sombra muy sutil */
+    border: 1px solid #eef2f6;
+}
+
+.pagos-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Poppins', sans-serif;
+}
+
+.pagos-table thead {
+    background-color: #003366;
+    color: white;
+}
+
+.pagos-table th {
+    padding: 18px 15px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.pagos-table td {
+    padding: 16px 15px;
+    text-align: center;
+    color: #444;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Quitar línea de separación a la última fila */
+.pagos-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- ESTILOS DE LOS BOTONES DE LA TABLA --- */
+.badge-estado {
+    background-color: #e6f8eb; 
+    color: #28a745; 
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.btn-boleta {
+    background-color: #f0f4fb;
+    color: #0057C2;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-boleta:hover {
+    background-color: #d8e5f8;
+}
+
+.config-icon {
+    color: #999;
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.config-icon:hover {
+    color: #003366;
+}
+
+/* --- FOOTER INFERIOR AZUL --- */
+.panel-contact-footer {
+    background-color: #003366;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    padding: 16px;
+    border-radius: 12px;
+    margin: 40px 20px 20px 20px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+}
+
+.panel-contact-footer .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+}
+
+.whatsapp-icon { color: #25D366; font-size: 24px; }
+.email-icon { color: #66b2ff; font-size: 22px; }
