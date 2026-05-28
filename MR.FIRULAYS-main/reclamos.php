@@ -30,10 +30,10 @@ $correoUsuario = $_SESSION['usuario'];
             </div>
 
             <ul class="panel-tabs">
-              <li class="tab-item"><a href="principal.php"><i class="fas fa-calendar-alt"></i> MIS CITAS</a></li>
-              <li class="tab-item"><a href="mascotas.php"><i class="fas fa-dog"></i> MIS MASCOTAS</a></li>
-              <li class="tab-item"><a href="pagos.php"><i class="fas fa-credit-card"></i> PAGOS</a></li>
-              <li class="tab-item active"><a href="reclamos.php"><i class="fas fa-comment-dots"></i> RECLAMOS/QUEJA</a></li>
+                <li class="tab-item"><a href="principal.php"><i class="fas fa-calendar-alt"></i> MIS CITAS</a></li>
+                <li class="tab-item"><a href="#"><i class="fas fa-dog"></i> MIS MASCOTAS</a></li>
+                <li class="tab-item"><a href="#"><i class="fas fa-credit-card"></i> PAGOS</a></li>
+                <li class="tab-item active"><a href="reclamos.php"><i class="fas fa-comment-dots"></i> RECLAMOS/QUEJA</a></li>
             </ul>
             <div class="user-profile-menu">
                 <span><?php echo $nombreUsuario; ?></span>
@@ -90,38 +90,32 @@ $correoUsuario = $_SESSION['usuario'];
                     </div>
                 </div>
 
-<!-- DERECHA: DESCRIPCIÓN Y EVIDENCIA (CON DISEÑO CHICO Y BONITO) -->
 <div style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display:flex; flex-direction:column; align-items: center;">
     <h3 style="color: #004aad; margin-bottom: 15px; width: 100%; text-align: left;"><i class="fas fa-keyboard"></i> Detalle de la queja</h3>
     
     <label style="display: block; font-weight: 600; margin-bottom: 5px; width: 100%; text-align: left;">Descripción detallada:</label>
     <textarea name="descripcion" placeholder="Describe lo sucedido con respeto para ayudarte..." required style="width:100%; height:120px; padding:15px; border-radius:8px; border:1px solid #ddd; resize:none; margin-bottom:20px; font-family: inherit; box-sizing: border-box;"></textarea>
     
-    <!-- CASILLA DE ADJUNTAR ESTILO AESTHETIC Y CHICO -->
     <label style="border: 2px dashed #b5c7e3; border-radius: 12px; padding: 15px; text-align: center; background: #f8faff; width: 280px; cursor: pointer; display: block; box-sizing: border-box; transition: background 0.3s;" onmouseover="this.style.background='#f0f4ff'" onmouseout="this.style.background='#f8faff'">
         <i class="fas fa-cloud-upload-alt" style="font-size: 1.8rem; color: #004aad; margin-bottom: 8px;"></i>
         <p style="margin: 0; font-size: 0.95rem; font-weight: bold; color: #004aad;">Adjuntar evidencia</p>
         <p style="margin: 3px 0 8px 0; font-size: 0.75rem; color: #777;">Formatos: JPG, PNG, MP4</p>
         
-        <!-- Botón falso personalizado y chiquito -->
         <span style="display: inline-block; background: #004aad; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; border-radius: 6px;">
             <i class="fas fa-search" style="margin-right: 5px;"></i>Buscar archivo
         </span>
         
-        <!-- El input real está oculto aquí abajo, pero funciona al hacer clic en el recuadro -->
         <input type="file" name="evidencia" id="file-input" accept="image/jpeg, image/png, video/mp4" style="display: none;" onchange="updateFileName()">
     </label>
     
-    <!-- Texto flotante que avisa qué archivo seleccionaron -->
     <div id="file-name" style="margin-top: 8px; font-size: 0.8rem; color: #555; font-weight: 500; min-height: 16px;">Ningún archivo seleccionado</div>
     
-    <!-- BOTÓN ENVIAR CHICO Y CENTRADO -->
     <button type="submit" style="margin-top: 25px; width: 180px; padding: 10px 15px; font-weight: bold; background: #004aad; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(0, 74, 173, 0.2);">
         <i class="fas fa-paper-plane"></i> ENVIAR
     </button>
 </div>
 
-<!-- SCRIPT EXTRA PARA QUE MUESTRE EL NOMBRE DEL ARCHIVO SELECCIONADO -->
+
 <script>
 function updateFileName() {
     var input = document.getElementById('file-input');

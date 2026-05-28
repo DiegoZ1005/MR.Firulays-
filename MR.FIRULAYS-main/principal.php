@@ -35,13 +35,10 @@ $nombreUsuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario'
             </div>
 
             <ul class="panel-tabs">
-              <li class="tab-item"><a href="principal.php"><i class="fas fa-calendar-alt"></i> MIS CITAS</a></li>
-    
-              <li class="tab-item"><a href="mascotas.php"><i class="fas fa-dog"></i> MIS MASCOTAS</a></li>
-    
-              <li class="tab-item active"><a href="pagos.php"><i class="fas fa-credit-card"></i> PAGOS</a></li>
-    
-              <li class="tab-item"><a href="reclamos.php"><i class="fas fa-comment-dots"></i> RECLAMOS/QUEJA</a></li>
+               <li class="tab-item active"><a href="principal.php"><i class="fas fa-calendar-alt"></i> MIS CITAS</a></li>
+               <li class="tab-item"><a href="mascotas.php"><i class="fas fa-dog"></i> MIS MASCOTAS</a></li>
+                <li class="tab-item"><a href="#"><i class="fas fa-credit-card"></i> PAGOS</a></li>
+                <li class="tab-item"><a href="reclamos.php"><i class="fas fa-comment-dots"></i> RECLAMOS/QUEJA</a></li>
             </ul>
 
             <div class="user-profile-menu">
