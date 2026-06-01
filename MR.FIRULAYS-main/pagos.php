@@ -1,8 +1,9 @@
 <?php
 session_start();
+include 'conexion.php'; // <--- Agrega esta línea para conectar a la BD
 
-// Protección: Si alguien intenta entrar sin iniciar sesión, lo devuelve al index
 if (!isset($_SESSION['usuario'])) {
+// ... el resto de tu código sigue igual
     echo "<script>
             alert('Acceso denegado. Por favor, inicia sesión para entrar al panel.');
             window.location.href = 'index.php';
@@ -72,35 +73,48 @@ $nombreUsuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario'
                             <th></th>
                         </tr>
                     </thead>
+                    
                     <tbody>
-                        <tr>
-                            <td>15/05/2026</td>
-                            <td>Luna</td>
-                            <td>Chequeo General</td>
-                            <td>S/ 80.00</td>
-                            <td><span class="badge-estado">Confirmado</span></td>
-                            <td><button class="btn-boleta">Ver boleta</button></td>
-                            <td><i class="fas fa-ellipsis-v config-icon"></i></td>
-                        </tr>
-                        <tr>
-                            <td>10/05/2026</td>
-                            <td>Ana</td>
-                            <td>Vacuna Triple Felina</td>
-                            <td>S/ 65.00</td>
-                            <td><span class="badge-estado">Confirmado</span></td>
-                            <td><button class="btn-boleta">Ver boleta</button></td>
-                            <td><i class="fas fa-ellipsis-v config-icon"></i></td>
-                        </tr>
-                        <tr>
-                            <td>05/05/2026</td>
-                            <td>Wanda</td>
-                            <td>Cesárea</td>
-                            <td>S/ 250.00</td>
-                            <td><span class="badge-estado">Confirmado</span></td>
-                            <td><button class="btn-boleta">Ver boleta</button></td>
-                            <td><i class="fas fa-ellipsis-v config-icon"></i></td>
-                        </tr>
-                    </tbody>
+                 <?php
+                 // 1. Obtenemos el ID del usuario actual
+                   // Nota: Usamos "1" por defecto para que puedas hacer pruebas si aún no pasas el id en el login
+                  $id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : 1; 
+
+                 // 2. Preparamos la consulta SQL para traer los pagos de este usuario
+                 $sql = "SELECT id, fecha, nombre_mascota, servicio, monto, estado FROM pagos WHERE id_usuario = '$id_usuario' ORDER BY fecha DESC";
+    
+                 // 3. Ejecutamos la consulta
+                  $resultado = mysqli_query($conexion, $sql);
+
+                  // 4. Verificamos si la consulta fue exitosa y si hay filas devueltas
+                 if ($resultado && mysqli_num_rows($resultado) > 0) {
+        
+                 // 5. El ciclo "while" dibujará un <tr> automáticamente por cada pago que encuentre en la BD
+                 while ($fila = mysqli_fetch_assoc($resultado)) {
+            
+                  // Damos formato a la fecha (DD/MM/AAAA) y al monto (2 decimales)
+                  $fecha_formateada = date("d/m/Y", strtotime($fila['fecha']));
+                  $monto_formateado = number_format($fila['monto'], 2);
+
+                   echo "<tr>";
+                   echo "<td>" . $fecha_formateada . "</td>";
+                   echo "<td>" . $fila['nombre_mascota'] . "</td>";
+                   echo "<td>" . $fila['servicio'] . "</td>";
+                   echo "<td>S/ " . $monto_formateado . "</td>";
+                   echo "<td><span class='badge-estado'>" . $fila['estado'] . "</span></td>";
+                   echo "<td><a href='vista_comprobante.php?id=" . $fila['id'] . "' class='btn-boleta' style='text-decoration: none; display: inline-block;'>Ver boleta</a></td>";
+                   echo "<td><i class='fas fa-ellipsis-v config-icon'></i></td>";
+                   echo "</tr>";
+                 }
+        
+                  } else {
+                     // 6. Si la tabla está vacía, mostramos este diseño limpio
+                   echo "<tr><td colspan='7' style='padding: 30px; text-align: center; color: #666;'>Aún no tienes pagos registrados.</td></tr>";
+                  }
+                 ?>
+                </tbody>
+
+
                 </table>
             </div>
         </section>

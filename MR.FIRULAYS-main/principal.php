@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include 'conexion.php';
 if (!isset($_SESSION['usuario'])) {
     echo "
     <script>
@@ -35,10 +35,10 @@ $nombreUsuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario'
             </div>
 
             <ul class="panel-tabs">
-               <li class="tab-item active"><a href="principal.php"><i class="fas fa-calendar-alt"></i> MIS CITAS</a></li>
-               <li class="tab-item"><a href="mascotas.php"><i class="fas fa-dog"></i> MIS MASCOTAS</a></li>
-                <li class="tab-item"><a href="#"><i class="fas fa-credit-card"></i> PAGOS</a></li>
-                <li class="tab-item"><a href="reclamos.php"><i class="fas fa-comment-dots"></i> RECLAMOS/QUEJA</a></li>
+              <li class="tab-item active"><a href="principal.php"><i class="fas fa-calendar-alt"></i> MIS CITAS</a></li>
+              <li class="tab-item"><a href="mascotas.php"><i class="fas fa-dog"></i> MIS MASCOTAS</a></li>
+              <li class="tab-item"><a href="pagos.php"><i class="fas fa-credit-card"></i> PAGOS</a></li>
+              <li class="tab-item"><a href="reclamos.php"><i class="fas fa-comment-dots"></i> RECLAMOS/QUEJA</a></li>
             </ul>
 
             <div class="user-profile-menu">
@@ -60,36 +60,83 @@ $nombreUsuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario'
                 <i class="fas fa-calendar-check banner-icon"></i>
                 <h2 id="welcomeMessage">¡Hola, <?php echo $nombreUsuario; ?>! Bienvenido a tu panel.</h2>
             </div>
-            <button class="btn-add-appointment" onclick="window.location.href='agendar.php'">
-            <i class="fas fa-plus"></i> Agendar nueva cita
-            </button>
+              <a href="agendar_cita.php" class="btn-add-appointment" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                 <i class="fas fa-plus"></i> Agendar nueva cita
+             </a>
         </section>
 
         <section class="appointments-section">
             <h3 class="section-title">Próximas citas</h3>
-            <div class="appointments-grid">
-                <div class="appointment-card">
-                    <div class="card-top-info">
-                        <span>15/05/2026</span>
-                        <span>10:00 AM</span>
-                    </div>
-                    <div class="card-main-content">
-                        <div class="pet-photo-placeholder">
-                            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=200" alt="Mascota">
-                        </div>
-                        <div class="pet-details">
-                            <h4>LUNA</h4>
-                            <p class="med-reason">Chequeo General</p>
-                            <p class="doc-assigned">Veterinaria: Dra. Carmen Soto</p>
-                            <span class="status-badge">Estado: Confirmada</span>
-                        </div>
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn-view-details">Ver detalles</button>
-                        <button class="btn-reprogram">Reprogramar</button>
-                    </div>
-                </div>
-            </div>
+            <div class="appointments-grid" style="display: flex; flex-wrap: wrap; gap: 25px; align-items: flex-start;">
+                
+                   <?php
+$id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : 1; 
+
+$sql_citas = "SELECT c.fecha, c.hora, c.servicio, c.estado, 
+                     m.nombre AS nombre_mascota, m.foto, 
+                     v.nombre AS nombre_vet
+              FROM citas c
+              INNER JOIN mascotas m ON c.id_mascota = m.id
+              INNER JOIN veterinarios v ON c.id_veterinario = v.id
+              WHERE c.id_usuario = '$id_usuario'
+              ORDER BY c.fecha ASC, c.hora ASC";
+              
+$resultado_citas = mysqli_query($conexion, $sql_citas);
+
+if ($resultado_citas && mysqli_num_rows($resultado_citas) > 0) {
+    while ($cita = mysqli_fetch_assoc($resultado_citas)) {
+        
+        $fecha_formateada = date("d/m/Y", strtotime($cita['fecha']));
+        $hora_formateada = date("h:i A", strtotime($cita['hora']));
+        
+        $foto_bd = $cita['foto'];
+        // Si no hay foto real, usamos al perrito de tu diseño original en lugar de la huella
+        if (!empty($foto_bd) && $foto_bd != 'default_pet.png') {
+            $foto_mascota = "img/" . htmlspecialchars($foto_bd); 
+        } else {
+            $foto_mascota = "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=200";
+        }
+        
+        echo '<div class="appointment-card" style="width: 350px; max-width: 100%;">';
+        
+        echo '  <div class="card-top-info">';
+        echo '      <span>' . htmlspecialchars($fecha_formateada) . '</span>';
+        echo '      <span>' . htmlspecialchars($hora_formateada) . '</span>';
+        echo '  </div>';
+        
+        echo '  <div class="card-main-content" style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">';
+        
+        // AQUÍ ESTÁ LA MAGIA: Forzamos el tamaño de la foto para que no rompa la tarjeta
+        echo '      <div class="pet-photo-placeholder" style="flex-shrink: 0;">';
+        echo '          <img src="' . $foto_mascota . '" alt="Mascota" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">';
+        echo '      </div>';
+        
+        echo '      <div class="pet-details">';
+        echo '          <h4>' . strtoupper(htmlspecialchars($cita['nombre_mascota'])) . '</h4>';
+        echo '          <p class="med-reason" style="margin-bottom: 5px;">' . htmlspecialchars($cita['servicio']) . '</p>';
+        echo '          <p class="doc-assigned" style="margin-bottom: 5px;">Veterinaria: ' . htmlspecialchars($cita['nombre_vet']) . '</p>';
+        
+        // Damos un color verde al estado si está confirmado
+        $color_estado = ($cita['estado'] == 'Confirmado') ? '#10b981' : '#f59e0b';
+        echo '          <span class="status-badge" style="color: ' . $color_estado . '; font-weight: bold; font-size: 13px;">Estado: ' . htmlspecialchars($cita['estado']) . '</span>';
+        
+        echo '      </div>';
+        echo '  </div>';
+        
+        echo '  <div class="card-actions">';
+        echo '      <button class="btn-view-details">Ver detalles</button>';
+        echo '      <button class="btn-reprogram">Reprogramar</button>';
+        echo '  </div>';
+        
+        echo '</div>';
+    }
+} else {
+    echo '<div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 10px; border: 1px dashed #cbd5e1;">';
+    echo '  <i class="far fa-calendar-times" style="font-size: 32px; margin-bottom: 15px; color: #94a3b8;"></i>';
+    echo '  <p style="margin: 0; font-size: 15px;">No tienes citas próximas programadas.</p>';
+    echo '</div>';
+}
+?>
         </section>
     </main>
 

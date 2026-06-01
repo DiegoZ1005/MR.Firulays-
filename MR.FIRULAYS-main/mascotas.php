@@ -38,87 +38,71 @@ $nombreUsuario = isset($_SESSION['nombre_usuario']) ? $_SESSION['nombre_usuario'
            <ul class="panel-tabs">
     <li class="tab-item"><a href="principal.php"><i class="fas fa-calendar-alt"></i> MIS CITAS</a></li>
     <li class="tab-item active"><a href="mascotas.php"><i class="fas fa-dog"></i> MIS MASCOTAS</a></li>
-    <li class="tab-item"><a href="#"><i class="fas fa-credit-card"></i> PAGOS</a></li>
+    <li class="tab-item"><a href="pagos.php"><i class="fas fa-credit-card"></i> PAGOS</a></li>
     <li class="tab-item"><a href="reclamos.php"><i class="fas fa-comment-dots"></i> RECLAMOS/QUEJA</a></li>
 </ul>
 
             <div class="user-profile-menu">
                 <div class="avatar-circle" id="userAvatar">
                     <i class="fas fa-user"></i>
-                </div>
-                <span class="user-name-text" id="userNameTop"><?php echo $nombreUsuario; ?></span>
-                
-                <button id="btnLogout" class="btn-small-logout" title="Cerrar Sesión" onclick="window.location.href='logout.php'">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
-        </nav>
-    </header>
+               
+                 <?php
+// Asegúrate de tener tu archivo de conexión incluido arriba
+// include 'conexion.php';
 
-    <main class="panel-content-wrapper">
-        <section class="welcome-container-pets">
-            <h2 class="pets-main-title">Mis mascotas</h2>
-            <p class="pets-sub-title">Aquí puedes ver a tus compañeros y toda su información</p>
-        </section>
+$id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : 1; 
 
-        <div class="pets-grid">
-            
-            <div class="pet-card card-purple">
-                <div class="pet-image">
-                    <img src="img/luna1.avif" alt="Luna">
-                </div>
-                <div class="pet-info">
-                    <h3>LUNA <i class="fas fa-paw text-purple"></i></h3>
-                    <p><i class="far fa-calendar-alt"></i> <strong>Edad:</strong> 3 años</p>
-                    <p><i class="fas fa-ribbon"></i> <strong>Raza:</strong> Golden Retriever</p>
-                    <p><i class="far fa-edit"></i> <strong>Descripción:</strong> Cariñosa, juguetona y muy obediente. Le encanta correr y estar al aire libre.</p>
-                    <p class="last-visit"><i class="far fa-clock"></i> <strong>Última atención:</strong> 15/04/2026</p>
-                </div>
-            </div>
+// Actualizamos el SELECT con los nombres exactos de tus columnas
+$sql_mascotas = "SELECT nombre, edad, raza, caracteristicas, foto, ultima_atencion FROM mascotas WHERE id_usuario = '$id_usuario'";
+$resultado_mascotas = mysqli_query($conexion, $sql_mascotas);
 
-            <div class="pet-card card-pink">
-                <div class="pet-image">
-                    <img src="img/ana.jpg" alt="Ana">
-                </div>
-                <div class="pet-info">
-                    <h3>ANA <i class="fas fa-paw text-pink"></i></h3>
-                    <p><i class="far fa-calendar-alt"></i> <strong>Edad:</strong> 2 años</p>
-                    <p><i class="fas fa-ribbon"></i> <strong>Raza:</strong> Cocker Spaniel</p>
-                    <p><i class="far fa-edit"></i> <strong>Descripción:</strong> Dulce, tranquila y muy sociable. Disfruta los paseos y los mimos.</p>
-                    <p class="last-visit"><i class="far fa-clock"></i> <strong>Última atención:</strong> 08/04/2026</p>
-                </div>
-            </div>
+$colores_css = ['card-purple', 'card-pink', 'card-green', 'card-yellow', 'card-blue'];
+$contador_color = 0;
 
-            <div class="pet-card card-green">
-                <div class="pet-image">
-                    <img src="img/donperro.jpg" alt="Don Perro">
-                </div>
-                <div class="pet-info">
-                    <h3>DON PERRO <i class="fas fa-paw text-green"></i></h3>
-                    <p><i class="far fa-calendar-alt"></i> <strong>Edad:</strong> 1 año</p>
-                    <p><i class="fas fa-ribbon"></i> <strong>Raza:</strong> Gato doméstico</p>
-                    <p><i class="far fa-edit"></i> <strong>Descripción:</strong> Curioso, activo y travieso. Le gusta explorar y dormir en su manta.</p>
-                    <p class="last-visit"><i class="far fa-clock"></i> <strong>Última atención:</strong> 20/04/2026</p>
-                </div>
-            </div>
-
-            <div class="pet-card card-yellow">
-                <div class="pet-image">
-                    <img src="img/wanda1.avif" alt="Wanda">
-                </div>
-                <div class="pet-info">
-                    <h3>WANDA <i class="fas fa-paw text-yellow"></i></h3>
-                    <p><i class="far fa-calendar-alt"></i> <strong>Edad:</strong> 5 años</p>
-                    <p><i class="fas fa-ribbon"></i> <strong>Raza:</strong> Labrador Retriever</p>
-                    <p><i class="far fa-edit"></i> <strong>Descripción:</strong> Protectora, noble y muy inteligente. Ama estar en familia.</p>
-                    <p class="last-visit"><i class="far fa-clock"></i> <strong>Última atención:</strong> 01/04/2026</p>
-                </div>
-            </div>
-
-            <div class="pet-card card-blue">
-                <div class="pet-image">
-                    <img src="img/aquiles.jpeg" alt="Aquiles">
-                </div>
+if ($resultado_mascotas && mysqli_num_rows($resultado_mascotas) > 0) {
+    while ($mascota = mysqli_fetch_assoc($resultado_mascotas)) {
+        
+        $color_actual = $colores_css[$contador_color % count($colores_css)];
+        
+        // Manejo de la foto real de tu base de datos
+        // Asumiendo que guardas el nombre de la imagen en la carpeta 'img/'
+        $foto_bd = $mascota['foto'];
+        if (!empty($foto_bd) && $foto_bd != 'default_pet.png') {
+            $ruta_foto = "img/" . htmlspecialchars($foto_bd); // Ajusta 'img/' si tu carpeta se llama distinto
+        } else {
+            $ruta_foto = "https://cdn-icons-png.flaticon.com/512/1076/1076928.png";
+        }
+        
+        echo '<div class="pet-card ' . $color_actual . '">';
+        echo '    <div class="pet-image">';
+        echo '        <img src="' . $ruta_foto . '" alt="Foto Mascota" style="object-fit: cover; width: 100%; height: 100%; border-radius: 15px 15px 0 0;">';
+        echo '    </div>';
+        echo '    <div class="pet-info">';
+        echo '        <h3>' . strtoupper(htmlspecialchars($mascota['nombre'])) . ' <i class="fas fa-paw"></i></h3>';
+        
+        $edad = !empty($mascota['edad']) ? htmlspecialchars($mascota['edad']) : 'No especificada';
+        echo '        <p><i class="far fa-calendar-alt"></i> <strong>Edad:</strong> ' . $edad . '</p>';
+        
+        echo '        <p><i class="fas fa-ribbon"></i> <strong>Raza:</strong> ' . htmlspecialchars($mascota['raza']) . '</p>';
+        
+        // Usamos 'caracteristicas' en lugar de 'descripcion'
+        $caracteristicas = !empty($mascota['caracteristicas']) ? htmlspecialchars($mascota['caracteristicas']) : 'Sin descripción';
+        echo '        <p><i class="fas fa-edit"></i> <strong>Descripción:</strong> ' . $caracteristicas . '</p>';
+        
+        // Usamos 'ultima_atencion' real
+        $ultima_atencion = !empty($mascota['ultima_atencion']) ? htmlspecialchars($mascota['ultima_atencion']) : 'Sin consultas aún';
+        echo '        <p class="last-visit"><i class="far fa-clock"></i> <strong>Última atención:</strong> ' . $ultima_atencion . '</p>';
+        
+        echo '    </div>';
+        echo '</div>';
+        
+        $contador_color++;
+    }
+} else {
+    echo '<p style="grid-column: 1 / -1; text-align: center; color: #666; padding: 40px; font-size: 16px;">Aún no tienes mascotas registradas. ¡Anímate a agregar una!</p>';
+}
+?>
+                    
                 <div class="pet-info">
                     <h3>AQUILES <i class="fas fa-paw text-blue"></i></h3>
                     <p><i class="far fa-calendar-alt"></i> <strong>Edad:</strong> 4 años</p>
